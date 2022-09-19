@@ -6,13 +6,12 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody rb;
 
     public float forwardForce = 2000f;
-    public float sideForce = 1000f;
-    float accel = 2000f;
-    float slow = 500f;
+    public float sideForce = 250f;
+    GameManager gameManager;
     // Start is called before the first frame update
     void Start()
     {
-
+        gameManager = FindObjectOfType<GameManager>();
 
     }
     void OnTriggerEnter(Collider other)
@@ -36,12 +35,20 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKey("d")) 
         {
-            rb.AddForce(sideForce * Time.deltaTime, 0, 0, ForceMode.VelocityChange);
+            //rb.AddForce(sideForce * Time.deltaTime, 0, 0, ForceMode.VelocityChange);
+            Command moveRight = new Command.MoveRight(rb, sideForce);
+            Invoker invoker = new Invoker();
+            invoker.SetCommand(moveRight);
+            invoker.ExecuteCommand();
         }
 
         if (Input.GetKey("a")) 
         {
-            rb.AddForce(-sideForce * Time.deltaTime, 0, 0, ForceMode.VelocityChange);
+            //rb.AddForce(-sideForce * Time.deltaTime, 0, 0, ForceMode.VelocityChange);
+            Command moveLeft = new Command.MoveLeft(rb, sideForce);
+            Invoker invoker = new Invoker();
+            invoker.SetCommand(moveLeft);
+            invoker.ExecuteCommand();
         }
 
         if (rb.position.y < -1.25f)
